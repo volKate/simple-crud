@@ -16,7 +16,7 @@
     "url": "https://github.com/volKate/simple-crud/issues"
   },
   "homepage": "https://github.com/volKate/simple-crud#readme",
-  "dependencies": {
+  "devDependencies": {
     "typescript": "^4.7.3"
   }
 }

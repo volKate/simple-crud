@@ -1,0 +1,22 @@
+{
+  "name": "simple-crud",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/volKate/simple-crud.git"
+  },
+  "author": "volKate",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/volKate/simple-crud/issues"
+  },
+  "homepage": "https://github.com/volKate/simple-crud#readme",
+  "dependencies": {
+    "typescript": "^4.7.3"
+  }
+}

@@ -1,4 +1,4 @@
-import { User } from "../modules";
+import { User } from "./user.module";
 
 class UsersDb {
   readonly users: User[] = [];

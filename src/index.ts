@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import http from "http";
-import { userController } from "./controllers";
+import { userController } from "./user/user.controller";
 
 dotenv.config();
 

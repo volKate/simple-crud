@@ -1,5 +1,5 @@
 import http from "http";
-import { userService } from "../user/user.service";
+import { userService } from "./user.service";
 
 export const userController: http.RequestListener = async (req, res) => {
   switch (req.method) {

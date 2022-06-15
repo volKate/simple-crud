@@ -1,5 +1,5 @@
-import { userDb } from "../db/users";
-import { User } from "../modules";
+import { userDb } from "./user.db";
+import { User } from "./user.module";
 
 class UserService {
   create(userPayload: Partial<User>): User {

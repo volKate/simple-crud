@@ -1,6 +1,5 @@
 import http from "http";
-import { userDb } from "../db/users";
-import { User } from "../modules";
+import { userService } from "../user/user.service";
 
 export const userController: http.RequestListener = async (req, res) => {
   switch (req.method) {
@@ -15,17 +14,15 @@ export const userController: http.RequestListener = async (req, res) => {
       });
       req.on("end", () => {
         const userPayload = JSON.parse(reqBody);
-        if (User.isValid(userPayload)) {
-          const { username, age, hobbies } = userPayload;
-          const user = new User(username, age, hobbies);
-          userDb.add(user);
+        try {
+          const user = userService.create(userPayload);
           res.writeHead(201, {
             "Content-Type": "application/json",
           });
           res.end(JSON.stringify(user));
-        } else {
+        } catch (err) {
           res.statusCode = 400;
-          res.end("Bad request: invalid or empty fields");
+          res.end((err as Error).message);
         }
       });
       break;

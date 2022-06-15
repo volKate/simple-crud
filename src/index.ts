@@ -5,7 +5,7 @@ import { userController } from "./controllers";
 dotenv.config();
 
 const URLS = {
-  user: "/api/user",
+  user: "/api/users",
 };
 
 const requestListener: http.RequestListener = (req, res) => {

@@ -3,8 +3,12 @@ import { User } from "./user.module";
 class UsersDb {
   readonly users: User[] = [];
 
-  add(user: User) {
+  addUser(user: User) {
     this.users.push(user);
+  }
+
+  getUserById(id: string): User | undefined {
+    return this.users.find((user) => user.id === id);
   }
 }
 

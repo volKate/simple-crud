@@ -28,6 +28,12 @@ class UserService {
     return user;
   }
 
+  removeById(id?: string): void {
+    this.findById(id);
+    // id is checked for being a string in findById method
+    userDb.removeUserById(id as string);
+  }
+
   update(userPayload: Partial<User>): User {
     if (!User.isValid(userPayload)) {
       throw new Error("Update user failed: invalid or empty fields");

@@ -62,6 +62,19 @@ export const userController: http.RequestListener = async (req, res) => {
           }
         });
         break;
+      case "DELETE":
+        const id = getIdParam(req.url);
+        const user = userService.findById(id);
+        if (!user) {
+          res.statusCode = 404;
+          res.end(`User with id: ${id} is not found`);
+          return;
+        } else {
+          userService.removeById(id);
+          res.statusCode = 204;
+          res.end();
+        }
+        break;
     }
   } catch (err) {
     res.statusCode = 400;

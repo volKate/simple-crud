@@ -15,6 +15,10 @@ class UserService {
     }
   }
 
+  findAll(): User[] {
+    return userDb.users;
+  }
+
   findById(id?: string): User | undefined {
     if (typeof id !== "string" || !validateUuid(id)) {
       throw new Error("Update user failed: invalid user id");

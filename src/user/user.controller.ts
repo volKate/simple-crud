@@ -1,4 +1,5 @@
 import http from "http";
+import { getIdParam } from "../helpers";
 import { userService } from "./user.service";
 
 export const userController: http.RequestListener = async (req, res) => {
@@ -18,8 +19,7 @@ export const userController: http.RequestListener = async (req, res) => {
         try {
           // update
           if (req.method === "PUT") {
-            // get last piece of url, expecting it to be id param
-            const id = req.url?.split("/")?.slice(-1)[0];
+            const id = getIdParam(req.url);
             const user = userService.findById(id);
             if (!user) {
               res.statusCode = 404;

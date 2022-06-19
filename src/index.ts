@@ -8,10 +8,10 @@ const URLS = {
   user: "/api/users",
 };
 
-const requestListener: http.RequestListener = (req, res) => {
+const requestListener: http.RequestListener = async (req, res) => {
   try {
     if (req.url?.startsWith(URLS.user)) {
-      userController(req, res);
+      await userController(req, res);
     } else {
       // if there is no controller for requested url end with an error
       res.statusCode = 404;

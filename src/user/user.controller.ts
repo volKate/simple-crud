@@ -1,6 +1,11 @@
 import http from "http";
 import { METHODS, METHODS_WITH_ID_PARAM } from "../constants";
-import { getIdParam, handleUserNotFound, parseReqBody } from "../helpers";
+import {
+  getIdParam,
+  handleUserNotFound,
+  isOperationFailedError,
+  parseReqBody,
+} from "../helpers";
 import { userService } from "./user.service";
 
 export const userController: http.RequestListener = async (req, res) => {
@@ -62,7 +67,10 @@ export const userController: http.RequestListener = async (req, res) => {
         break;
     }
   } catch (err) {
-    res.statusCode = 400;
-    res.end((err as Error).message);
+    if (err instanceof Error && isOperationFailedError(err.message)) {
+      res.statusCode = 400;
+      res.end((err as Error).message);
+    }
+    throw err;
   }
 };

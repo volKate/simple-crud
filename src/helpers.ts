@@ -17,6 +17,10 @@ export const getOperationFailedMessage = (
   return `${operationName} failed: ${operationError}`;
 };
 
+export const isOperationFailedError = (errMsg: string): boolean => {
+  return typeof errMsg === "string" && errMsg.includes("failed:");
+};
+
 export const parseReqBody = (
   req: http.IncomingMessage
 ): Promise<Record<string, unknown>> => {

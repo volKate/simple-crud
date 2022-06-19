@@ -4,7 +4,7 @@ import { userController } from "./user/user.controller";
 
 dotenv.config();
 
-const URLS = {
+export const URLS = {
   user: "/api/users",
 };
 
@@ -23,7 +23,7 @@ const requestListener: http.RequestListener = async (req, res) => {
   }
 };
 
-const server = http.createServer(requestListener);
+export const server = http.createServer(requestListener);
 
 const port = process.env.PORT || 8004;
 

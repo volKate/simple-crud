@@ -33,7 +33,6 @@ export const userController: http.RequestListener = async (req, res) => {
           res.statusCode = 200;
           res.end(JSON.stringify(user));
         }
-        res.end();
         break;
       case "PUT":
         const userUpdatePayload = await parseReqBody(req);
@@ -68,6 +67,7 @@ export const userController: http.RequestListener = async (req, res) => {
     }
   } catch (err) {
     if (err instanceof Error && isOperationFailedError(err.message)) {
+      res.setHeader("Content-Type", "text/plain");
       res.statusCode = 400;
       res.end((err as Error).message);
       return;

@@ -42,6 +42,7 @@ export const handleUserNotFound = (
   res: http.ServerResponse,
   userId?: string
 ) => {
+  res.setHeader("Content-Type", "text/plain");
   res.statusCode = 404;
   res.end(`User ${userId ? `with id: ${userId} ` : ""}is not found`);
 };

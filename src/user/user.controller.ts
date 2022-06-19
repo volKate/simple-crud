@@ -70,6 +70,7 @@ export const userController: http.RequestListener = async (req, res) => {
     if (err instanceof Error && isOperationFailedError(err.message)) {
       res.statusCode = 400;
       res.end((err as Error).message);
+      return;
     }
     throw err;
   }

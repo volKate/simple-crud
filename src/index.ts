@@ -9,14 +9,18 @@ const URLS = {
 };
 
 const requestListener: http.RequestListener = (req, res) => {
-  if (req.url?.startsWith(URLS.user)) {
-    userController(req, res);
-    return;
+  try {
+    if (req.url?.startsWith(URLS.user)) {
+      userController(req, res);
+    } else {
+      // if there is no controller for requested url end with an error
+      res.statusCode = 404;
+      res.end("Requested resource is not found");
+    }
+  } catch {
+    res.statusCode = 500;
+    res.end("Internal server error");
   }
-
-  // if there is no controller for requested url end with an error
-  res.statusCode = 404;
-  res.end("Requested resource is not found");
 };
 
 const server = http.createServer(requestListener);

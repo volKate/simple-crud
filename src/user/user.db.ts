@@ -11,8 +11,17 @@ class UsersDb {
     return this.users.find((user) => user.id === id);
   }
 
-  removeUserById(id: string): void {
+  removeUserById(id: string): User | undefined {
+    const userToDelete = this.getUserById(id);
     this.users = this.users.filter((user) => user.id !== id);
+    return userToDelete;
+  }
+
+  updateUser(id: string, user: User) {
+    const userIdx = this.users.findIndex((user) => user.id === id);
+    if (userIdx !== -1) {
+      this.users[userIdx] = user;
+    }
   }
 }
 

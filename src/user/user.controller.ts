@@ -1,76 +1,61 @@
 import http from "http";
-import { getIdParam } from "../helpers";
+import { METHODS, METHODS_WITH_ID_PARAM } from "../constants";
+import { getIdParam, handleUserNotFound, parseReqBody } from "../helpers";
 import { userService } from "./user.service";
 
 export const userController: http.RequestListener = async (req, res) => {
+  const reqMethod = req.method as unknown as METHODS;
+  let userId;
+  if (METHODS_WITH_ID_PARAM.includes(reqMethod)) {
+    userId = getIdParam(req.url);
+  }
+
+  res.setHeader("Content-Type", "application/json");
+
   try {
     switch (req.method) {
       case "GET":
-        res.writeHead(200, {
-          "Content-Type": "application/json",
-        });
         if (req.url?.endsWith("/users")) {
           const users = userService.findAll();
+          res.statusCode = 200;
           res.end(JSON.stringify(users));
         } else {
-          const id = getIdParam(req.url);
-          const user = userService.findById(id);
+          const user = userService.findById(userId);
           if (!user) {
-            res.statusCode = 404;
-            res.end(`User with id: ${id} is not found`);
+            handleUserNotFound(res, userId);
             return;
-          } else {
-            res.end(JSON.stringify(user));
           }
+          res.statusCode = 200;
+          res.end(JSON.stringify(user));
         }
         res.end();
         break;
       case "PUT":
-      case "POST":
-        let reqBody = "";
-        req.on("data", (chunk) => {
-          reqBody += chunk;
+        const userUpdatePayload = await parseReqBody(req);
+        const updatedUser = userService.update({
+          id: userId,
+          ...userUpdatePayload,
         });
-        req.on("end", () => {
-          const userPayload = JSON.parse(reqBody);
-          // update
-          if (req.method === "PUT") {
-            const id = getIdParam(req.url);
-            const user = userService.findById(id);
-            if (!user) {
-              res.statusCode = 404;
-              res.end(`User with id: ${id} is not found`);
-              return;
-            }
-            const updatedUser = userService.update({
-              id,
-              ...userPayload,
-            });
 
-            res.writeHead(200, {
-              "Content-Type": "application/json",
-            });
-            res.end(JSON.stringify(updatedUser));
-          }
-          // create
-          if (req.method === "POST") {
-            const user = userService.create(userPayload);
-            res.writeHead(201, {
-              "Content-Type": "application/json",
-            });
-            res.end(JSON.stringify(user));
-          }
-        });
+        if (!updatedUser) {
+          handleUserNotFound(res, userId);
+          return;
+        }
+        res.statusCode = 200;
+        res.end(JSON.stringify(updatedUser));
+        break;
+      case "POST":
+        const userCreatePayload = await parseReqBody(req);
+        const newUser = userService.create(userCreatePayload);
+        res.statusCode = 201;
+        res.end(JSON.stringify(newUser));
         break;
       case "DELETE":
-        const id = getIdParam(req.url);
-        const user = userService.findById(id);
-        if (!user) {
-          res.statusCode = 404;
-          res.end(`User with id: ${id} is not found`);
+        const deletedUser = userService.removeById(userId);
+        if (!deletedUser) {
+          handleUserNotFound(res, userId);
           return;
         } else {
-          userService.removeById(id);
           res.statusCode = 204;
           res.end();
         }
